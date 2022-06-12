@@ -13,19 +13,34 @@ import './App.css';
 //   {text: 'Llorar con la llorona', completed: false},
 // ]
 
-function App() {
+function useLocalStorage(itemName, initialValue){
+  const localStorageItem = localStorage.getItem(itemName)
+  let parsedItem;
 
-  const localStorageTodos = localStorage.getItem('TODOS_V1')
-  let parsedTodos;
-
-  if (!localStorageTodos){
-    localStorage.setItem('TODOS_V1', JSON.stringify([]))
-    parsedTodos = []
+  if (!localStorageItem){
+    localStorage.setItem(itemName, JSON.stringify(initialValue))
+    parsedItem = initialValue
   }else{
-    parsedTodos = JSON.parse(localStorageTodos)
+    parsedItem = JSON.parse(localStorageItem)
   }
 
-  const [todos, setTodos] = React.useState(parsedTodos)
+  const [item, setItem] = React.useState(parsedItem)
+
+  const saveItem  = (newTodos) => {
+    const stringifiedTodos = JSON.stringify(newTodos)
+    localStorage.setItem(itemName, stringifiedTodos)
+    setItem(newTodos)
+  }
+
+  return [
+    item,
+    saveItem
+  ]
+}
+
+function App() {
+
+  const [todos, saveTodos] = useLocalStorage('TODOS_V1', [])
   const [searchValue, setSearchValue] = React.useState('');
 
   //Contador para ToDos completados
@@ -35,12 +50,6 @@ function App() {
 
   //Filtro para los todos para que sean buscados en el Input
   const searchedTodos = todos.filter (todo => (todo.text.toLowerCase().includes(searchValue.toLowerCase())))
-
-  const saveTodos  = (newTodos) => {
-    const stringifiedTodos = JSON.stringify(newTodos)
-    localStorage.setItem('TODOS_V1', stringifiedTodos)
-    setTodos(newTodos)
-  }
 
   const completeTodo = (text) => {
     const todoIndex = todos.findIndex(todo => todo.text === text);
