@@ -14,33 +14,54 @@ import './App.css';
 // ]
 
 function useLocalStorage(itemName, initialValue){
-  const localStorageItem = localStorage.getItem(itemName)
-  let parsedItem;
 
-  if (!localStorageItem){
-    localStorage.setItem(itemName, JSON.stringify(initialValue))
-    parsedItem = initialValue
-  }else{
-    parsedItem = JSON.parse(localStorageItem)
-  }
+  const [error, setError] = React.useState(false)
 
-  const [item, setItem] = React.useState(parsedItem)
+  const [loading, setLoading] = React.useState(true)
+
+  const [item, setItem] = React.useState(initialValue)
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      try{
+        const localStorageItem = localStorage.getItem(itemName)
+        let parsedItem;
+        if (!localStorageItem){
+          localStorage.setItem(itemName, JSON.stringify(initialValue))
+          parsedItem = initialValue
+        }else{
+          parsedItem = JSON.parse(localStorageItem)
+        }
+
+        setItem(parsedItem)
+        setLoading(false)
+      } catch(error) {
+        setError(error)
+      }
+    }, 2000)
+  },)
 
   const saveItem  = (newTodos) => {
-    const stringifiedTodos = JSON.stringify(newTodos)
-    localStorage.setItem(itemName, stringifiedTodos)
-    setItem(newTodos)
+    try {
+      const stringifiedTodos = JSON.stringify(newTodos)
+      localStorage.setItem(itemName, stringifiedTodos)
+      setItem(newTodos)
+    } catch(error) {
+      setError(error)
+    }
   }
 
-  return [
+  return {
     item,
-    saveItem
-  ]
+    saveItem,
+    loading,
+    error,
+  }
 }
 
 function App() {
 
-  const [todos, saveTodos] = useLocalStorage('TODOS_V1', [])
+  const {item: todos, saveItem: saveTodos, loading } = useLocalStorage('TODOS_V1', [])
   const [searchValue, setSearchValue] = React.useState('');
 
   //Contador para ToDos completados
@@ -78,6 +99,9 @@ function App() {
       />
 
       <TodoList>
+        {/* {error && <p>A ocurrido un error, recarga la pagina o vuelve mas tarde</p>} */}
+        {loading && <p>Estamos cargando, no desesperes...</p>}
+        {(!loading && !searchedTodos.length) && <p>Crea tu primer TODO</p> }
         {searchedTodos.map(todo => (
           <TodoItem
             key={todo.text}
