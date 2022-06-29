@@ -23,6 +23,15 @@ function TodoProvider(props) {
     //Filtro para los todos para que sean buscados en el Input
     const searchedTodos = todos.filter(todo => (todo.text.toLowerCase().includes(searchValue.toLowerCase())))
 
+    const addTodo = (text) => {
+        const newTodos = [...todos]
+        newTodos.push({
+            completed: true,
+            text,
+        })
+        saveTodos(newTodos)
+    }
+
     const completeTodo = (text) => {
         const todoIndex = todos.findIndex(todo => todo.text === text);
         const newTodos = [...todos]
@@ -47,6 +56,7 @@ function TodoProvider(props) {
             searchValue,
             setSearchValue,
             searchedTodos,
+            addTodo,
             completeTodo,
             deleteTodo,
             openModal,
