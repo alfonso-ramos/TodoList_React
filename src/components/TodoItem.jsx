@@ -1,14 +1,17 @@
-import React from 'react'
-
+import '../styles/components/TodoItem.css'
 const TodoItem = (props) => {
   return (
-    <div className='TodoItem'>
-      <li>
-        <span>C</span>
-        <p>{props.text}</p>
-        <span>X</span>
-      </li>
-    </div>
+    <li className='TodoItem'>
+      <span className={`Icon Icon-check ${props.completed && 'Icon-check--active'}`}>
+        √
+      </span>
+      <p className={`TodoItem-p ${props.completed && 'TodoItem-p--complete'}`}>
+        {props.text}
+      </p>
+      <span className='Icon Icon-delete'>
+        X
+      </span>
+    </li>
   )
 }
 

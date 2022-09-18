@@ -1,3 +1,5 @@
+import '../styles/components/TodoCounter.css'
+
 const TodoCounter = () => {
   return (
     <div className="TodoCounter">

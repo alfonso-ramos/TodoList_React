@@ -5,9 +5,9 @@ import TodoItem from "./components/TodoItem"
 import CreateTodoButton from "./components/CreateTodoButton"
 
 const todos = [
-  {text: "Tarea1", complete: false},
-  {text: "Tarea2", complete: false},
-  {text: "Tarea3", complete: false},
+  {text: "Tarea1", completed: false},
+  {text: "Tarea2", completed: true},
+  {text: "Tarea3", completed: false},
 ]
 function App(props) {
 
@@ -16,10 +16,13 @@ function App(props) {
       <TodoCounter />
 
       <TodoSearch />
-      <input placeholder="Escribe una tarea" />
 
       <TodoList>
-        {todos.map(todo => (<TodoItem key={todo.text} text={todo.text}/>))}
+        {todos.map(todo => (
+          <TodoItem
+            key={todo.text}
+            text={todo.text}
+            completed={todo.completed}/>))}
       </TodoList>
 
       <CreateTodoButton />

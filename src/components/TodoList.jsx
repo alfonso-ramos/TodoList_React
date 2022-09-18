@@ -2,11 +2,9 @@ import React from 'react'
 
 const TodoList = (props) => {
   return (
-    <div className='TodoList'>
-      <ul>
-        {props.children}
-      </ul>
-    </div>
+    <ul className='TodoList'>
+      {props.children}
+    </ul>
   )
 }
 

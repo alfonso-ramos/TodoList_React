@@ -1,8 +1,8 @@
+import '../styles/components/CreateTodoButton.css'
+
 const CreateTodoButton = () => {
   return (
-    <div className="CreateTodoButton">
-      <button>+</button>
-    </div>
+      <button className="CreateTodoButton">+</button>
   )
 }
 
