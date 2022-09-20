@@ -11,7 +11,6 @@ const defaultTodos = [
   {text: "comprar mandado", completed: false},
   {text: "ir a la universidad", completed: false},
   {text: "Terminar el curso de introduccion a react", completed: false},
-  
 ]
 function App(props) {
   const [todos, setTodos] = React.useState(defaultTodos)
@@ -34,6 +33,21 @@ function App(props) {
     })
   }
 
+// Metodo para eliminar y terminar tareas
+  const completeTodo = (text) => {
+    const todoIndex = todos.findIndex(todo => todo.text === text)
+    const newTodos = [...todos]
+    newTodos[todoIndex].completed = true
+    setTodos(newTodos)
+  }
+
+  const deleteTodo = (text) => {
+    const todoIndex = todos.findIndex(todo => todo.text === text)
+    const newTodos = [...todos]
+    newTodos.splice(todoIndex, 1)
+    setTodos(newTodos)
+  }
+
   return (
     <div className="App">
       <TodoCounter
@@ -51,7 +65,10 @@ function App(props) {
           <TodoItem
             key={todo.text}
             text={todo.text}
-            completed={todo.completed}/>))}
+            completed={todo.completed}
+            onComplete={() => completeTodo(todo.text)}
+            onDelete={() => deleteTodo(todo.text)}
+          />))}
       </TodoList>
 
       <CreateTodoButton />
