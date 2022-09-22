@@ -1,10 +1,5 @@
 import React from "react"
-
-import TodoCounter from "./components/TodoCounter"
-import TodoSearch from "./components/TodoSearch"
-import TodoList from "./components/TodoList"
-import TodoItem from "./components/TodoItem"
-import CreateTodoButton from "./components/CreateTodoButton"
+import { AppUI } from "./AppUI"
 
 const defaultTodos = [
   {text: "Tarea1", completed: false},
@@ -12,7 +7,8 @@ const defaultTodos = [
   {text: "ir a la universidad", completed: false},
   {text: "Terminar el curso de introduccion a react", completed: false},
 ]
-function App(props) {
+
+function App() {
   const [todos, setTodos] = React.useState(defaultTodos)
 
   const [searchValue, setSearchValue] = React.useState('')
@@ -49,30 +45,21 @@ function App(props) {
   }
 
   return (
-    <div className="App">
-      <TodoCounter
-        total={totalTodos}
-        completed={completedTodos}
-      />
+    <>
+      <AppUI
+        totalTodos={totalTodos}
+        completedTodos={completedTodos}
 
-      <TodoSearch
-        searchValue ={searchValue}
+        searchValue={searchValue}
         setSearchValue={setSearchValue}
+
+        searchedTodos={searchedTodos}
+
+        completeTodo={completeTodo}
+        deleteTodo={deleteTodo}
+
       />
-
-      <TodoList>
-        {searchedTodos.map(todo => (
-          <TodoItem
-            key={todo.text}
-            text={todo.text}
-            completed={todo.completed}
-            onComplete={() => completeTodo(todo.text)}
-            onDelete={() => deleteTodo(todo.text)}
-          />))}
-      </TodoList>
-
-      <CreateTodoButton />
-    </div>
+    </>
   )
 }
 
