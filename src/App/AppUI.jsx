@@ -7,6 +7,9 @@ import CreateTodoButton from "../components/CreateTodoButton"
 
 
 const AppUI = ({
+    loading,
+    error,
+
     totalTodos,
     completedTodos,
 
@@ -25,10 +28,15 @@ const AppUI = ({
                 completed={completedTodos}
             />
 
+
             <TodoSearch
                 searchValue={searchValue}
                 setSearchValue={setSearchValue}
             />
+
+            {error && <p>Desespérate</p>}
+            {loading && <p>Cargando...</p>}
+            {(!loading && !searchedTodos) && <p>¡Crea tu primer TODO!</p>}
 
             <TodoList>
                 {searchedTodos.map(todo => (

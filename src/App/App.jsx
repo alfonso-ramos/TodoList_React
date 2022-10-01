@@ -12,35 +12,49 @@ const defaultTodos = [
 // CustoHook para el localStorage
 // Recibe como parametros el nombre y el estado incial
 function useLocalStorage(itemName, initialValue){
-  // Se guarda el item en una constante
-  const localStorageItem = localStorage.getItem(itemName)
-  let parsedItem;
 
-  if(!localStorageItem){
-    localStorage.setItem(itemName, JSON.stringify(initialValue));
-    parsedItem = initialValue;
-  } else {
-    parsedItem = JSON.parse(localStorageItem)
-  }
-  
-  const [item, setItem] = React.useState(parsedItem)
-  
+  const [loading, setLoading] = React.useState(true)
+  const [item, setItem] = React.useState(initialValue)
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      // Se guarda el item en una constante
+      const localStorageItem = localStorage.getItem(itemName)
+      let parsedItem;
+
+      if(!localStorageItem){
+        localStorage.setItem(itemName, JSON.stringify(initialValue));
+        parsedItem = initialValue;
+      } else {
+        parsedItem = JSON.parse(localStorageItem)
+      }
+
+      setItem(parsedItem);
+      setLoading(false)
+    }, 1500)
+  })
+
   const saveItem = (newItem) => {
     const stringifiedItem = JSON.stringify(newItem)
     localStorage.setItem(itemName , stringifiedItem)
     setItem(newItem)
   }
 
-  return [
+  return {
     item,
-    saveItem
-  ];
+    saveItem,
+    loading,
+  };
 }
 
 
 function App() {
 
-  const [todos, saveTodos] = useLocalStorage('TODOS_V1', []);
+  const {
+    item: todos,
+    saveItem:saveTodos,
+    loading
+  } = useLocalStorage('TODOS_V1', []);
 
   const [searchValue, setSearchValue] = React.useState('')
 
@@ -77,9 +91,13 @@ function App() {
     saveTodos(newTodos)
   }
 
+  React.useEffect(() => {
+
+  })
   return (
     <>
       <AppUI
+        loading={loading}
         totalTodos={totalTodos}
         completedTodos={completedTodos}
 
